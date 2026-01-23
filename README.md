@@ -188,8 +188,8 @@ cd A_line_following_robot
 | LCD Display | LED Status | Robot Action |
 |-------------|-----------|--------------|
 | "Moving Forward" | LED 1 & 2 OFF | Going straight on the line |
-| "Turnning Right" | LED 1 ON, LED 2 OFF | Turning right to follow line |
-| "Turnning Left" | LED 1 OFF, LED 2 ON | Turning left to follow line |
+| "Turning Right" | LED 1 ON, LED 2 OFF | Turning right to follow line |
+| "Turning Left" | LED 1 OFF, LED 2 ON | Turning left to follow line |
 | "Stopped" | LED 1 & 2 OFF | Both sensors on black (end of line) |
 
 ## ⚙️ How It Works
