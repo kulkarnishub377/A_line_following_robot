@@ -1,0 +1,30 @@
+# Arduino IDE
+*.o
+*.elf
+*.hex
+*.eep
+*.lss
+*.map
+*.sym
+*.srec
+*.bin
+
+# Build directories
+build/
+*.autosave
+
+# IDE specific files
+.vscode/
+.idea/
+*.sublime-*
+
+# OS specific files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Temporary files
+*.tmp
+*.bak
