@@ -1,0 +1,60 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+permissions:
+  contents: write
+
+jobs:
+  create-release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Extract version from tag
+        id: get_version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
+      - name: Extract release notes from CHANGELOG.md
+        id: changelog
+        run: |
+          VERSION="${{ steps.get_version.outputs.VERSION }}"
+          # Strip leading 'v' for matching changelog entry
+          VERSION_NUM="${VERSION#v}"
+          # Extract the relevant section from CHANGELOG.md
+          NOTES=$(awk "/^## \[${VERSION_NUM}\]/{found=1; next} found && /^## \[/{exit} found{print}" CHANGELOG.md)
+          # Write to a file to preserve newlines
+          echo "$NOTES" > release_notes.md
+          echo "Notes extracted for version ${VERSION_NUM}"
+
+      - name: Package source code archives
+        run: |
+          VERSION="${{ steps.get_version.outputs.VERSION }}"
+          REPO_NAME="A_line_following_robot"
+          # Create source archive (zip)
+          git archive --format=zip --prefix="${REPO_NAME}-${VERSION}/" HEAD \
+            -o "${REPO_NAME}-${VERSION}-source.zip"
+          # Create source archive (tar.gz)
+          git archive --format=tar.gz --prefix="${REPO_NAME}-${VERSION}/" HEAD \
+            -o "${REPO_NAME}-${VERSION}-source.tar.gz"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: "Line Following Robot ${{ steps.get_version.outputs.VERSION }}"
+          body_path: release_notes.md
+          draft: false
+          prerelease: false
+          files: |
+            A_line_following_robot-${{ steps.get_version.outputs.VERSION }}-source.zip
+            A_line_following_robot-${{ steps.get_version.outputs.VERSION }}-source.tar.gz
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,114 @@
+name: 🐛 Bug Report
+description: Report a bug or unexpected behavior in the Line Following Robot project
+title: "[Bug]: "
+labels: ["bug", "needs-triage"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report! Please provide as much detail as possible so we can reproduce and fix the issue.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: A clear and concise description of what the bug is.
+      placeholder: Describe the bug...
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      description: Steps to reproduce the behavior.
+      placeholder: |
+        1. Connect hardware as per README
+        2. Upload code to Arduino
+        3. Power on the robot
+        4. Observe the issue...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What did you expect to happen?
+      placeholder: The robot should follow the black line...
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior
+      description: What actually happened?
+      placeholder: The robot spins in circles instead...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: board
+    attributes:
+      label: Arduino Board
+      description: Which Arduino board are you using?
+      options:
+        - Arduino Mega 2560
+        - Arduino Uno
+        - Arduino Nano
+        - Other (specify in additional context)
+    validations:
+      required: true
+
+  - type: input
+    id: arduino_ide_version
+    attributes:
+      label: Arduino IDE Version
+      description: What version of Arduino IDE are you using?
+      placeholder: e.g., 2.3.2
+    validations:
+      required: true
+
+  - type: textarea
+    id: hardware
+    attributes:
+      label: Hardware Setup
+      description: List the components you are using (IR sensors, motor driver, LCD, etc.) and any modifications to the standard circuit.
+      placeholder: |
+        - Motor Driver: L293D
+        - IR Sensors: Digital (2x)
+        - LCD: 16x2 I2C at address 0x27
+        - Battery: 9V
+    validations:
+      required: false
+
+  - type: textarea
+    id: serial_output
+    attributes:
+      label: Serial Monitor Output
+      description: If applicable, paste the output from the Serial Monitor (add `Serial.begin(9600)` to `setup()` if needed).
+      render: text
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Add any other context, photos, or videos about the problem here.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I have searched for existing issues before creating this one
+          required: true
+        - label: I have read the [README](../../README.md) and [Troubleshooting](../../README.md#troubleshooting) section
+          required: true
+        - label: I have verified my hardware connections match the pin configuration in the README
+          required: false

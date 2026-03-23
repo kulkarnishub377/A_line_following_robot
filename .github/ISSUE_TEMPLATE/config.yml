@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 Discussions
+    url: https://github.com/kulkarnishub377/A_line_following_robot/discussions
+    about: Ask questions, share ideas, or discuss the project with the community.
+  - name: 📖 Documentation
+    url: https://github.com/kulkarnishub377/A_line_following_robot/tree/main/docs
+    about: Check the detailed hardware setup and circuit diagram documentation.
+  - name: 🔧 Troubleshooting Guide
+    url: https://github.com/kulkarnishub377/A_line_following_robot#troubleshooting
+    about: Review the troubleshooting section in the README before opening an issue.

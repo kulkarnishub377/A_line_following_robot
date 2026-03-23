@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.0.0] - 2024
+## [1.0.0] - 2024-03-23
 
 ### Added
 - Complete project restructure with organized directories
@@ -47,6 +47,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Improved startup message
   - Enhanced code organization
 - Badges in README (License, Arduino, PRs Welcome)
+- GitHub community health files
+  - `.github/ISSUE_TEMPLATE/bug_report.yml` - Structured bug report template
+  - `.github/ISSUE_TEMPLATE/feature_request.yml` - Feature request template
+  - `.github/ISSUE_TEMPLATE/config.yml` - Issue template configuration
+  - `.github/pull_request_template.md` - Pull request template
+  - `.github/workflows/ci.yml` - CI workflow (Arduino compile, lint, Python tests)
+  - `.github/workflows/release.yml` - Automated release workflow
+  - `SECURITY.md` - Security policy and vulnerability reporting guide
+- Python tools in `/python` directory
+  - `robot_simulation.py` - Software simulation of robot behaviour
+  - `pid_controller.py` - PID controller implementation
+  - `sensor_simulation.py` - IR sensor simulation utilities
+  - `data_logger.py` - Serial data logging tool
+  - `serial_monitor.py` - Serial monitor helper
 
 ### Changed
 - Reorganized repository structure for better navigation
@@ -98,3 +112,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ---
 
 **Note**: Version numbers will be tagged in git when releases are created.
+
+---
+
+[1.0.0]: https://github.com/kulkarnishub377/A_line_following_robot/releases/tag/v1.0.0
+[0.1.0]: https://github.com/kulkarnishub377/A_line_following_robot/commits/main
