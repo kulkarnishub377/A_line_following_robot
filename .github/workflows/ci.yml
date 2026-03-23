@@ -1,0 +1,134 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+permissions:
+  contents: read
+
+jobs:
+  # ─── Arduino Sketch Compilation ───────────────────────────────────────────
+  arduino-build:
+    name: Compile Arduino Sketches
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        board:
+          - fqbn: arduino:avr:mega
+            name: Arduino Mega 2560
+          - fqbn: arduino:avr:uno
+            name: Arduino Uno
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Arduino CLI
+        uses: arduino/setup-arduino-cli@v2
+
+      - name: Install Arduino AVR core
+        run: |
+          arduino-cli core update-index
+          arduino-cli core install arduino:avr
+
+      - name: Install required libraries
+        run: |
+          arduino-cli lib install "LiquidCrystal I2C"
+
+      - name: Compile main sketch (${{ matrix.board.name }})
+        run: |
+          arduino-cli compile \
+            --fqbn ${{ matrix.board.fqbn }} \
+            src/line_following_robot.ino
+
+      - name: Compile example sketches (${{ matrix.board.name }})
+        run: |
+          for sketch in examples/*.ino; do
+            echo "Compiling: $sketch"
+            arduino-cli compile --fqbn ${{ matrix.board.fqbn }} "$sketch"
+          done
+
+  # ─── Arduino Lint ─────────────────────────────────────────────────────────
+  arduino-lint:
+    name: Arduino Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run Arduino Lint
+        uses: arduino/arduino-lint-action@v1
+        with:
+          path: .
+          library-manager: false
+          compliance: permissive
+
+  # ─── Python Tests ─────────────────────────────────────────────────────────
+  python-tests:
+    name: Python Linting & Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r python/requirements.txt
+          pip install flake8
+
+      - name: Lint with flake8
+        run: |
+          # stop on syntax errors or undefined names
+          flake8 python/ --count --select=E9,F63,F7,F82 --show-source --statistics
+          # treat all other issues as warnings
+          flake8 python/ --count --max-line-length=120 --statistics --exit-zero
+
+      - name: Run Python simulation (smoke test)
+        run: |
+          python -c "
+          import sys
+          sys.path.insert(0, 'python')
+          import sensor_simulation
+          print('sensor_simulation module OK')
+          import pid_controller
+          print('pid_controller module OK')
+          import robot_simulation
+          print('robot_simulation module OK')
+          import data_logger
+          print('data_logger module OK')
+          print('All Python modules imported successfully')
+          "
+
+  # ─── Markdown Lint ────────────────────────────────────────────────────────
+  markdown-lint:
+    name: Markdown Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Lint Markdown files
+        uses: DavidAnson/markdownlint-cli2-action@v16
+        with:
+          globs: "**/*.md"
+          config: |
+            {
+              "default": true,
+              "MD013": false,
+              "MD033": false,
+              "MD041": false,
+              "MD024": false
+            }
