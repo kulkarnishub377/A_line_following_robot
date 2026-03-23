@@ -1,15 +1,11 @@
 name: Release
 
 on:
-  # Fires automatically when commits land on main/master (covers PR merges)
-  # and when a version tag is pushed (e.g. git push origin v1.2.0)
+  # Fires when a version tag is pushed (e.g. git push origin v1.0.0)
   push:
-    branches:
-      - main
-      - master
     tags:
       - 'v*.*.*'
-  # Can also be triggered manually from the GitHub Actions UI
+  # Run on demand from the GitHub Actions UI — click Actions → Release → Run workflow
   workflow_dispatch:
     inputs:
       version:
@@ -38,13 +34,9 @@ jobs:
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             # Manual run: use the version the user typed in
             echo "VERSION=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
-          elif [[ "$GITHUB_REF" == refs/tags/* ]]; then
+          else
             # Tag push: derive version from the tag name
             echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
-          else
-            # Branch push (PR merge): read the latest version from CHANGELOG.md
-            VERSION_NUM=$(awk '/^## \[/{gsub(/.*\[|\].*/, ""); print; exit}' CHANGELOG.md)
-            echo "VERSION=v${VERSION_NUM}" >> $GITHUB_OUTPUT
           fi
 
       - name: Skip if release already exists
